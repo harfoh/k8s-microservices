@@ -1,0 +1,23 @@
+name: frontend build, scan, and push images to Hub
+on: push
+jobs:
+  build_and_snyk:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build a Docker image
+      run: |
+      cd src/frontend  
+      docker build -t harfoh/frontend:v1.0.0 .
+    - name: Run Snyk to check Docker image for vulnerabilities
+      continue-on-error: true
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: harfoh/frontend:v1.0.0
+        args: --file=Dockerfile
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: frontend_image_result.sarif
