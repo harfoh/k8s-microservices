@@ -1,0 +1,80 @@
+version: '3.8'
+services:
+  frontend:
+    image: frontend
+    ports:
+     - "8081:8080"
+    env_file:
+      - .env  
+ 
+  adservice:
+    image: adservice
+  cartservice:
+    image: cart
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+  checkoutservice:
+    image: checkout
+    env_file:
+      - .env   
+
+  currencyservice:
+    image: currency
+   # env_file:
+    #  - .env  
+    environment:
+      - PORT=7000
+      - DISABLE_PROFILER=true
+  loadgenerator:
+    image: loadgen
+  paymentservice:
+    image: payment
+    environment:
+      - PORT=50051  
+      - DISABLE_PROFILER=true
+  productservice:
+    image: product
+    environment:
+      - GOTRACEBACK=single
+      - DISABLE_PROFILER=true      
+  recommedservice:
+    image: recommendation
+    env_file:
+      - .env  
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PORT=8080
+    #  - DISABLE_PROFILER=true  
+
+  shippingservice:
+    image: shipping
+    env_file:
+      - .env     
+   # environment:
+   #   - DISABLE_PROFILER=true 
+  # shoppingassistantservice:
+    # image: shopping
+    # environment:
+    #   - PYTHONUNBUFFERED=1
+    #   - PORT=8080
+    #   - DISABLE_PROFILER=true  
+    #   - PROJECT_ID=project_id    
+    #   - REGION=region
+    #   - ALLOYDB_CLUSTER_NAME=cluster
+    #   - ALLOYDB_INSTANCE_NAME=instance
+    #   - ALLOYDB_DATABASE_NAME=database
+    #   - ALLOYDB_TABLE_NAME=user
+    #   - ALLOYDB_SECRET_NAME=secret
+    # env_file:
+    #   - .env              
+  emailservice:
+    image: email
+    env_file:
+      - .env 
+    environment:
+      - DISABLE_PROFILER=true    
+  redis:
+    image: redis    
+          

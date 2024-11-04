@@ -23,6 +23,7 @@ RUN apt-get -qq update \
 
 # get packages
 COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 FROM base
