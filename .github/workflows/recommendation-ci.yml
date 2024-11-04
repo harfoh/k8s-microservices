@@ -4,9 +4,11 @@ jobs:
   build_and_snyk:
     runs-on: ubuntu-latest
     steps:
+
     - uses: actions/checkout@v4
     - name: Build a Docker image
       run:  docker build -f ./src/recommendationservice/Dockerfile -t harfoh/recommendation:v1.0.0 ./src/recommendationservice
+
     - name: Run Snyk to check Docker image for vulnerabilities
       continue-on-error: true
       uses: snyk/actions/docker@master
@@ -14,7 +16,12 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: harfoh/recommendation:v1.0.0
-        args: --file=./src/recommendationservice/Dockerfile     
+        args: --file=./src/recommendationservice/Dockerfile    
+
+    - name: Replace security-severity undefined for license-related findings 
+      run: |
+        sed -i 's/"security-severity": "null"/"security-severity": "0"/g' snyk.sarif
+
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
@@ -24,5 +31,6 @@ jobs:
       with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
     - name: Push to Hub
       run: docker push harfoh/recommendation:v1.0.0
