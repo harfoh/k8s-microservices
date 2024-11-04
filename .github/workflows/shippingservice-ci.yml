@@ -1,5 +1,5 @@
 name: ShippingService build, scan, and push images to Hub
-on: push
+on: workflow_dispatch
 jobs:
   build_and_snyk:
     runs-on: ubuntu-latest
