@@ -17,7 +17,7 @@ jobs:
         args: --file=./src/frontend/Dockerfile
     - name: List files in directory for debug
       run: ls       
-    # - name: Upload result to GitHub Code Scanning
-    #   uses: github/codeql-action/upload-sarif@v3
-    #   with:
-    #     sarif_file: synk.sarif
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: snyk.sarif
