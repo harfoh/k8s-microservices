@@ -20,4 +20,4 @@ jobs:
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: result.sarif
+        sarif_file: synk.sarif
