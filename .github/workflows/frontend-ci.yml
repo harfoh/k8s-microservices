@@ -6,7 +6,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build a Docker image
-      run:  docker build -f ./src/frontend/Dockerfile -t harfoh/frontend:v1.0.0 .
+      run:  docker build -f ./src/frontend/Dockerfile -t harfoh/frontend:v1.0.0 ./src/frontend
     - name: Run Snyk to check Docker image for vulnerabilities
       continue-on-error: true
       uses: snyk/actions/docker@master
