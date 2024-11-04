@@ -16,7 +16,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: harfoh/frontend:v1.0.0
-        args: --file=Dockerfile
+        args: --file=./src/frontend/Dockerfile
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
