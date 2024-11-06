@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-svc
+spec:
+  selector:
+    app: cart
+  ports:
+    - protocol: TCP
+      port: 7070
+      targetPort: 7070
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cart-config
+data:
+  DOTNET_EnableDiagnostics: "0"
+  ASPNETCORE_HTTP_PORTS: "7070"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:  
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:    
+      containers:
+        - name: cart
+          image: harfoh/cart:v1.0.0
+          env:
+            - name: REDIS-ADDR
+              value: "redis-svc.default:6379"
+            - name: DOTNET_EnableDiagnostics
+              valueFrom:
+                configMapKeyRef:
+                  name: cart-config
+                  key: DOTNET_EnableDiagnostics
+            - name: ASPNETCORE_HTTP_PORTS
+              valueFrom:
+                configMapKeyRef:
+                  name: cart-config
+                  key: ASPNETCORE_HTTP_PORTS               
+                            
+
+

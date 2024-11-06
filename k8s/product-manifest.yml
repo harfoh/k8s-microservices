@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-svc
+spec:
+  selector:
+    app: duct
+  ports:
+    - protocol: TCP
+      port: 3550
+      targetPort: 3550
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-config
+data:
+  gotraceback: "single"
+  disable_profiler: "true"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:  
+      app: duct
+  template:
+    metadata:
+      labels:
+        app: duct
+    spec:    
+      containers:
+        - name: product
+          image: harfoh/product:v1.0.0
+          env:
+            - name: GOTRACEBACK
+              valueFrom:
+                configMapKeyRef:
+                  name: product-config
+                  key: gotraceback
+            - name: DISABLE_PROFILER
+              valueFrom:
+                configMapKeyRef:
+                  name: product-config
+                  key: disable_profiler

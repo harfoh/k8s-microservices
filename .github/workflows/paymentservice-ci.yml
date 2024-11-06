@@ -18,7 +18,6 @@ jobs:
         image: harfoh/payment:v1.0.0
         args: --file=./src/paymentservice/Dockerfile  
 
-
     - name: Replace security-severity undefined for license-related findings 
       run: |
         sed -i 's/"security-severity": "null"/"security-severity": "0"/g' snyk.sarif
