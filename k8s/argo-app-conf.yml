@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/alpha1
+kind: Application
+metadata:
+  name: argo-cd
+spec:
+  project: default
+
+  source: 
+    repoURL: https://github.com/harfoh/k8s-microservices.git
+    targetRevision: HEAD
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+
+  syncPolicy:
+    automated:
+      selfHeal: true 
+      prune: true   
+
