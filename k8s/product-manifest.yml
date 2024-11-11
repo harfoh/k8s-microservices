@@ -23,7 +23,7 @@ kind: Deployment
 metadata:
   name: product-deployment
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:  
       app: duct
